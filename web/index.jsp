@@ -29,7 +29,20 @@
         <%  
             if(request.getParameter("status") != null){
             if(request.getParameter("status").equals("f"))
-                out.print("<script type=\"text/javascript\">alert(\"Login Invalid:-)\");document.getElementById(\"lbt\").click();</script>");
+                out.print("<script type=\"text/javascript\">"
+                        + "alert(\"Login Invalid:-)\");"
+                        + "document.getElementById(\"lbt\").click();"
+                        + "</script>");
+            else if(request.getParameter("status").equals("signedup")){
+                out.println("<script type=\"text/javascript\">"
+                        + "alert(\"Signed Up Successfully:-)\");"
+                        + "</script>");
+            }else if(request.getParameter("status").equals("signupfailed")){
+                out.println("<script type=\"text/javascript\">"
+                        + "alert(\"Sign Up Failed:-)\");"
+                        + "</script>");
+            }
+                
         }
             if(session.getAttribute("User") == null){
         %>
@@ -72,7 +85,7 @@
                         
                         <div id="signup">   
                             <h1>Sign Up for Free</h1>
-                            <form id='signupf' name = 'signupf' action="" method="post">
+                            <form id='signupf' name = 'signupf' action="signup" method="post">
                                 <div class="top-row">
                                     <div class="field-wrap">
                                         <label>
@@ -90,19 +103,19 @@
                                 </div>
                                 
                                 <div class="field-wrap">
-                                        <label>
-                                        Email Address<span class="req">*</span>
-                                        </label>
-                                        <input name ='emailid' type="email" required autocomplete="off"/>
-                                    </div>
-    
-                                <div class="field-wrap">
                                     <label>
                                     Roll No.<span class="req">*</span>
                                     </label>
                                     <input name='rno' type="text" required autocomplete="off"/>
                                 </div>
                                 
+                                <div class="field-wrap">
+                                        <label>
+                                        Email Address<span class="req">*</span>
+                                        </label>
+                                        <input name ='emailid' type="email" required autocomplete="off"/>
+                                    </div>
+    
                                 <div class="field-wrap">
                                     <label>
                                     Set A Password<span class="req">*</span>
@@ -149,10 +162,7 @@
         <div class="content">
             
         </div>
-            
-        <%
-        
-        %>
+          
         <script  type="text/javascript" src="js/main.js"></script>
         <script type="text/javascript" src="js/login-pop.js"></script>
         <script src = "js/signup_or_login.js"></script>

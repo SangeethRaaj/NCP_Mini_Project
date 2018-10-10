@@ -79,7 +79,7 @@
                         
                         <div id="signup">   
                             <h1>Sign Up for Free</h1>
-                            <form id='signupf' name = 'signupf' action="" method="post">
+                            <form id='signupf' name = 'signupf' action="signup" method="post">
                                 <div class="top-row">
                                     <div class="field-wrap">
                                         <label>
