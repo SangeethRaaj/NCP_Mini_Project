@@ -1,0 +1,69 @@
+<?xml version ="1.0"?>
+<!DOCTYPE hospital SYSTEM "hospital.dtd">
+<?xml-stylesheet type="text/xsl" href="hospital.xsl"?>
+<hospital>
+	<patient>
+		<patname>Abc </patname>
+		<patid> A1</patid>
+		<paage>50 </paage>
+		<disease> Fever</disease>
+		<tdname>abc </tdname>
+		<roomno> 1</roomno>
+	</patient>
+	
+	<patient>
+		<patname>Bcd</patname>
+		<patid> A2</patid>
+		<paage>60</paage>
+		<disease>Heart Attack</disease>
+		<tdname>bcd </tdname>
+		<roomno> 10</roomno>
+	</patient> 
+	
+	<patient>
+		<patname>Cde </patname>
+		<patid> A3</patid>
+		<paage>55 </paage>
+		<disease>Heart Attack</disease>
+		<tdname>cde </tdname>
+		<roomno> 11</roomno>		
+	</patient>
+	
+	<patient>
+		<patname>Def </patname>
+		<patid> A4</patid>
+		<paage>50 </paage>
+		<disease> Block in Heart</disease>
+		<tdname>def </tdname>
+		<roomno> 20</roomno>
+	</patient>
+		
+	<patient>
+		<patname>Efg</patname>
+		<patid> A5</patid>
+		<paage>25 </paage>
+		<disease> Accident in left leg</disease>
+		<tdname>efg </tdname>
+		<roomno> 21</roomno>		
+	</patient>
+	
+	<patient>
+		<patname>Fgh</patname>
+		<patid> A5</patid>
+		<paage>30</paage>
+		<disease> Accident in left Hand</disease>
+		<tdname>fgh </tdname>
+		<roomno> 22</roomno>
+	</patient>
+	
+	<patient>
+		<patname>Ghi</patname>
+		<patid> A6</patid>
+		<paage>75</paage>
+		<disease> Kidney failure</disease>
+		<tdname>ghi</tdname>
+		<roomno> 30</roomno>
+	</patient>
+</hospital>
+
+<!-- </?xml-stylesheet> -->

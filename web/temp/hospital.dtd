@@ -1,0 +1,8 @@
+<!ELEMENT hospital (patient)>
+<!ELEMENT patient (patname,patid,paage,disease,tdname,roomno)>
+<!ELEMENT patname (#PCDATA)>
+<!ELEMENT patid (#PCDATA)>
+<!ELEMENT paage (#PCDATA)>
+<!ELEMENT disease (#PCDATA)>
+<!ELEMENT tdname (#PCDATA)>
+<!ELEMENT roomno (#PCDATA)>
