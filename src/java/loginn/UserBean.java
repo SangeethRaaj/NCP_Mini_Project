@@ -31,9 +31,9 @@ public class UserBean {
        return RollNo;
                       }
 
-    public void setRollNo(String newLastName) {
-       RollNo = newLastName;
-                      }
+    public void setRollNo(String st) {
+       RollNo = st;
+     }
 
 
     public String getPassword() {

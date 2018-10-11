@@ -1,12 +1,19 @@
 <%-- 
     Document   : convenor.jsp
     Created on : Oct 4, 2018, 11:29:42 AM
-    Author     : Vasanth
+    Author     : Sangeeth
 --%>
 
 
+<%@page import="classes.ClassDAO"%>
+<%@page import="classes.ClassBean"%>
 <%@page import="loginn.*"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="java.io.*,java.util.*,java.sql.*"%>
+<%@ page import="javax.servlet.http.*,javax.servlet.*" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
 
 <html>
     <head>
@@ -18,6 +25,7 @@
         <link rel="stylesheet" type="text/css" href="css/table.css"/>
         <link rel="stylesheet" type="text/css" href="css/radio.css"/>
         <link rel="stylesheet" type="text/css" href="./css/login.css"/>
+        <link rel="stylesheet" type="text/css" href="css/newClass.css"/>
         <script src = "http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <link href='https://fonts.googleapis.com/css?family=Titillium+Web:400,300,600' rel='stylesheet' type='text/css'>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -32,12 +40,13 @@
         
         <%!
             UserBean u = null;
+            String un = null;
+            ArrayList<ClassBean> a = null;
         %>
         <%  
             if(request.getParameter("status") != null){
-            if(request.getParameter("status").equals("f"))
-                out.print("<script type=\"text/javascript\">alert(\"Login Invalid:-)\");document.getElementById(\"lbt\").click();</script>");
-        }
+                out.print("<script type=\"text/javascript\">alert(\""+request.getParameter("status") +"\");document.getElementById(\"lbt\").click();</script>");
+            }
             if(session.getAttribute("User") == null){
         %>
         
@@ -145,7 +154,8 @@
                 <% }
                     else{
                         u = (UserBean)session.getAttribute("User");
-                        u.getUserName();
+                        un = u.getUserName();
+                        a = ClassDAO.getClasses(u);
                 %>
                 <a><button id="logout" onclick="location.href = 'logout'" >Logout as <%=u.getName()%></button></a>
                 <%}
@@ -160,8 +170,22 @@
                 </div>
                 <div class="main">
                     <div id="clas" class="tabcontent">
-                        <button onclick="javascript:void(0)">New Class</button>
+                        
+                        <button id = "newClassbtn">New Class</button>
 
+                        <div id="newClassForm">
+                            
+                            <form action="newClass" method="post">
+                                    <div class="field-wrap">
+                                        <label>
+                                        Class Name<span class="req">*</span>
+                                        </label>
+                                        <input name='className' type="text" required />
+                                    </div>
+                                    <button name = 'newClass' type="submit" class="button button-block"/>Create</button>
+                            </form>
+                        </div>
+                        
                         <table class="tabula">
                             <thead>
                                 <tr>
@@ -179,30 +203,29 @@
                                 </tr>
                             </tfoot>
                             <tbody>
-                                <tr>
-                                    <td>kki@cbe</td>
-                                    <td>15CSE401</td>
-                                    <td>98</td>
-                                    <td><button onclick="javascript:void(0)">View/Modify</button><button onclick="javascript:void(0)">Delete</button></td>
-                                </tr>
-                                <tr>
-                                    <td>kki@cbe</td>
-                                    <td>15CSE402</td>
-                                    <td>12</td>
-                                    <td><button onclick="javascript:void(0)">View/Modify</button><button onclick="javascript:void(0)">Delete</button></td>
-                                </tr>
-                                <tr>
-                                    <td>kki@cbe</td>
-                                    <td>15CSE403</td>
-                                    <td>45</td>
-                                    <td><button onclick="javascript:void(0)">View/Modify</button><button onclick="javascript:void(0)">Delete</button></td>
-                                </tr>
-                                <tr>
-                                    <td>kki@cbe</td>
-                                    <td>15CSE404</td>
-                                    <td>98</td>
-                                    <td><button onclick="javascript:void(0)">View/Modify</button><button onclick="javascript:void(0)">Delete</button></td>
-                                </tr>
+                                
+                                <%
+                                    for(ClassBean cla : a){
+                                        %>
+                                        <tr>
+                                        <td><%=cla.getClassId()%></td>
+                                        <td><%=cla.getName()%></td>
+                                        <td>-</td>
+                                        <td><button onclick="javascript:void(0)">View/Modify</button><button onclick="javascript:void(0)">Delete</button></td>
+                                    </tr>
+                                    <%
+                                    }
+                                    
+                                    %>
+                                
+                                <c:forEach var="cla" items="${a}">
+                                    <tr>
+                                        <td>${cla.getClassId()}</td>
+                                        <td>${cla.getName()}</td>
+                                        <td>-</td>
+                                        <td><button onclick="javascript:void(0)">View/Modify</button><button onclick="javascript:void(0)">Delete</button></td>
+                                    </tr>
+                                </c:forEach>
                             </tbody>
                         </table>
                     </div>
@@ -445,6 +468,7 @@
         </div>
         <script  type="text/javascript" src="js/convenor_tabs.js"></script>
         <script type="text/javascript" src="js/login-pop.js"></script>
+        <script type="text/javascript" src="js/newclass.js"></script>
         <script src = "js/signup_or_login.js"></script>
     </body>
 </html>

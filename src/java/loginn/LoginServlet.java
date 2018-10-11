@@ -26,7 +26,7 @@ public class LoginServlet extends HttpServlet {
              if (user.isValid()){
                   HttpSession session = request.getSession(true);
                   session.setMaxInactiveInterval(30*60); // timeout in 30 minutes
-                  session.setAttribute("valida", true);
+                  session.setAttribute("valid", true);
                   session.setAttribute("User",user); 
                   response.sendRedirect("index.jsp"); //logged-in page      		
              }
