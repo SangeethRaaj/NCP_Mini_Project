@@ -20,6 +20,7 @@ public class ClassDAO {
 
     static Connection currentCon = null;
     static ResultSet rs = null;
+    static ResultSet rs1 = null;
     
     public static boolean setNo(int n){
         
@@ -167,6 +168,31 @@ public class ClassDAO {
             System.out.println("Size of arraList : "+cnt);
         } catch (Exception e) {
             System.out.println(e);
+        } finally {if (rs != null) {try {rs.close();} catch (Exception e) {}rs = null;}if (stmt != null) {try {stmt.close();} catch (Exception e) {}stmt = null;
+            }if (currentCon != null) {try {currentCon.close();} catch (Exception e) {}currentCon = null;}}
+        return a;
+    }
+    
+    public static ArrayList<ClassDataBeans> getParticipatingClasses(UserBean bean){
+        ArrayList<ClassDataBeans> a = new ArrayList<ClassDataBeans>();
+        Statement stmt = null;
+        String UserName = bean.getUserName();
+        String searchQuery = "SELECT * FROM `Studentslist` WHERE `SID` Like '"+UserName+"'";
+        System.out.println("User name is " + UserName);
+        try {
+            currentCon = ConnectionManager.getConnection();
+            stmt = currentCon.createStatement();
+            rs = stmt.executeQuery(searchQuery);
+            int cnt = 0;
+            while (rs.next()) {
+                cnt++;
+                String ClassID = rs.getString("ClassID");
+                ClassDataBeans bb = getClass(ClassID);
+                a.add(bb);
+            }
+            System.out.println("Size of arraList : "+cnt);
+        } catch (Exception e) {
+            System.out.println(e);
         } finally {
             if (rs != null) {
                 try {
@@ -175,7 +201,6 @@ public class ClassDAO {
                 }
                 rs = null;
             }
-
             if (stmt != null) {
                 try {
                     stmt.close();
@@ -183,7 +208,49 @@ public class ClassDAO {
                 }
                 stmt = null;
             }
-
+            if (currentCon != null) {
+                try {
+                    currentCon.close();
+                } catch (Exception e) {
+                }
+                currentCon = null;
+        }}
+        return a;
+    }
+    
+    private static ClassDataBeans getClass(String ClassID){
+        Statement stmt = null;
+        try {
+            currentCon = ConnectionManager.getConnection();
+            stmt = currentCon.createStatement();
+            String searchQuery = "SELECT * FROM `classlist` WHERE ClassId='"
+                + ClassID
+                + "'";
+            rs1 = stmt.executeQuery(searchQuery);
+            if (rs1.next()) {
+                ClassDataBeans bb = new ClassDataBeans();
+                bb.setClassId(ClassID);
+                 String Name = rs1.getString("Name");
+                bb.setName(Name);
+                return bb;
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        } finally {
+            if (rs1 != null) {
+                try {
+                    rs1.close();
+                } catch (Exception e) {
+                }
+                rs1 = null;
+            }
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (Exception e) {
+                }
+                stmt = null;
+            }
             if (currentCon != null) {
                 try {
                     currentCon.close();
@@ -192,6 +259,39 @@ public class ClassDAO {
                 currentCon = null;
             }
         }
-        return a;
+        return null;
+    
+    }
+
+    public static status joinClass(UserBean bean, ClassBean c) {
+        
+        if(bean.isValid()){
+            Statement stmt = null;
+            String UserName = bean.getUserName();
+            String ClassId = c.getClassId();
+            String searchQuery
+                = "SELECT * FROM `Studentslist` WHERE `SID` Like '"+UserName+"' AND `ClassID` LIKE '"+ClassId+"'";
+            String insertQuery = "INSERT INTO `Studentslist`(`SID`, `ClassID`) VALUES ('"+UserName+"','"+ClassId+"')";
+            
+            try {
+                currentCon = ConnectionManager.getConnection();
+                stmt = currentCon.createStatement();
+                rs = stmt.executeQuery(searchQuery);
+                if (rs.next()) {
+                    String s = "Already you belong to the class";
+                    return new status(false, s);
+                }
+                else{
+                    stmt.executeUpdate(insertQuery);
+                    return new status(true, "Successful");
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+            } finally {if (rs != null) {try {rs.close();} catch (Exception e) {}rs = null;}if (stmt != null) {try {stmt.close();} catch (Exception e) {}stmt = null;}
+                if (currentCon != null) {try {currentCon.close();} catch (Exception e) {}currentCon = null;}}
+        }
+        
+        return new status(false, "Error!!");
+
     }
 }

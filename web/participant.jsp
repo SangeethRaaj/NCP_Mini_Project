@@ -5,6 +5,8 @@
 --%>
 
 
+<%@page import="java.util.ArrayList"%>
+<%@page import="classes.*"%>
 <%@page import="loginn.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
@@ -18,6 +20,7 @@
         <link rel="stylesheet" type="text/css" href="css/part.css"/>
         <link rel="stylesheet" type="text/css" href="css/radio.css"/>
         <link rel="stylesheet" type="text/css" href="./css/login.css"/>
+        <link rel="stylesheet" type="text/css" href="css/newClass.css"/>
         <script src = "http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <link href='https://fonts.googleapis.com/css?family=Titillium+Web:400,300,600' rel='stylesheet' type='text/css'>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -32,13 +35,14 @@
         </div>
         <%!
             UserBean u = null;
+            ArrayList<ClassDataBeans> a = null;
         %>
         <%  
             if(request.getParameter("status") != null){
-            if(request.getParameter("status").equals("f"))
-                out.print("<script type=\"text/javascript\">alert(\"Login Invalid:-)\");document.getElementById(\"lbt\").click();</script>");
+                out.print("<script type=\"text/javascript\">alert(\""+request.getParameter("status")+"\");document.getElementById(\"lbt\").click();</script>");
         }
             if(session.getAttribute("User") == null){
+                response.sendRedirect("index.jsp");
         %>
         
         <div id="loginn" class="modal">
@@ -146,6 +150,7 @@
                     else{
                         u = (UserBean)session.getAttribute("User");
                         u.getUserName();
+                        a = ClassDAO.getParticipatingClasses(u);
                 %>
                 <a><button id="logout" onclick="location.href = 'logout'" >Logout as <%=u.getName()%></button></a>
                 <%}
@@ -159,36 +164,37 @@
                 </div>
                 <div class="main">
                     <div id="clas" class="tabcontent">
-                        <button onclick="javascript:void(0)">New Class</button>
+                        <button id = "newClassbtn">Join Class</button>
+
+                        <div id="newClassForm">
+                            
+                            <form action="joinClass" method="post">
+                                    <div class="field-wrap">
+                                        <label>
+                                        Enter The Class Id that the instructor Shared<span class="req">*</span>
+                                        </label>
+                                        <input name='ClassId' type="text" required />
+                                    </div>
+                                    <button name = 'newClass' type="submit" class="button button-block"/>Create</button>
+                            </form>
+                        </div>
+                        
+                        
                         <table id="customers">
                                 <tr>
                                   <th>Course Name</th>
-                                  <th>Attendance%</th>
+                                  <th>Attendance% <%= a.size() %></th>
                                 </tr>
-                                <tr>
-                                  <td>Biometrics</td>
-                                  <td>98</td>
-                                  </tr>
-                                <tr>
-                                  <td>Net Centric Programming</td>
-                                  <td>100</td>
-                                  
-                                </tr>
-                                <tr>
-                                  <td>Machine Learning and Data Mining</td>
-                                  <td>100</td>
-                                  
-                                </tr>
-                                <tr>
-                                  <td>Internet of Things</td>
-                                  <td>96</td>
-                                  
-                                </tr>
-                                <tr>
-                                  <td>Machine Learning and Data Mining Lab.</td>
-                                  <td>80</td>
+                                <%
+                                 for(ClassDataBeans aa : a){
+                                %>
+                                     <tr>
+                                        <td><%= aa.getName()%></td>
+                                        <td>94.2</td>
+                                     </tr>
+                                <% }
+                                %>
                                 
-                                </tr>
                               
                         </table>
                     </div>
@@ -206,6 +212,7 @@
         </div>
         <script  type="text/javascript" src="js/convenor_tabs.js"></script>
         <script type="text/javascript" src="js/login-pop.js"></script>
+        <script type="text/javascript" src="js/newclass.js"></script>
         <script src = "js/signup_or_login.js"></script>
     </body>
 </html>
