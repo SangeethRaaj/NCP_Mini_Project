@@ -20,6 +20,10 @@
         <servlet-name>joinClassServlet</servlet-name>
         <servlet-class>classes.joinClassServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>addAttendance</servlet-name>
+        <servlet-class>attendance.addAttendance</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -39,6 +43,10 @@
     <servlet-mapping>
         <servlet-name>joinClassServlet</servlet-name>
         <url-pattern>/joinClass</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>addAttendance</servlet-name>
+        <url-pattern>/addAttendance</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -134,6 +134,7 @@
         
         <% }
 
+
         %>
         <div id="navbar">
             <a  href="index.jsp">ATTMan</a>
@@ -149,6 +150,9 @@
                 <% }
                     else{
                         u = (UserBean)session.getAttribute("User");
+                        if( !u.isValid() ){
+                            response.sendRedirect("index.jsp?status=Please Login");
+}
                         u.getUserName();
                         a = ClassDAO.getParticipatingClasses(u);
                 %>
@@ -183,7 +187,7 @@
                         <table id="customers">
                                 <tr>
                                   <th>Course Name</th>
-                                  <th>Attendance% <%= a.size() %></th>
+                                  <th>Attendance </th>
                                 </tr>
                                 <%
                                  for(ClassDataBeans aa : a){

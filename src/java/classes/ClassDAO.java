@@ -139,6 +139,91 @@ public class ClassDAO {
         return null;
     }
 
+    public static status addSlot(UserBean bean, ClassBean c, String sTime, String eTime) {
+        
+        if(bean.isValid()){
+            Statement stmt = null;
+            String UserName = bean.getUserName();
+            int n = getNo();
+            String insertQuery = "INSERT INTO `slotslist`(`Slotno`, `ClassID`, `StartTime`, `EndTime`) VALUES "
+                    + "("+n+",'"+c.getClassId()+"','"+sTime+"','"+eTime+"')";
+            
+            try {
+                currentCon = ConnectionManager.getConnection();
+                stmt = currentCon.createStatement();
+                
+                stmt.executeUpdate(insertQuery);
+                setNo(n+1);
+                return new status(true, "Successful");
+                
+            } catch (Exception e) {
+                System.out.println(e);
+            } finally {if (rs != null) {try {rs.close();} catch (Exception e) {}rs = null;}if (stmt != null) {try {stmt.close();} catch (Exception e) {}stmt = null;}
+                if (currentCon != null) {try {currentCon.close();} catch (Exception e) {}currentCon = null;}}
+        }
+        
+        return new status(false,"Failed");
+    }
+
+    public static status insertAttd(String qry){
+        Statement stmt = null;
+        try {
+                currentCon = ConnectionManager.getConnection();
+                stmt = currentCon.createStatement();
+                stmt.executeUpdate(qry);
+                return new status(true, "Successful");
+                
+            } catch (Exception e) {
+                System.out.println(e);
+            } finally {if (rs != null) {try {rs.close();} catch (Exception e) {}rs = null;}if (stmt != null) {try {stmt.close();} catch (Exception e) {}stmt = null;}
+                if (currentCon != null) {try {currentCon.close();} catch (Exception e) {}currentCon = null;}}
+        return new status(false, "Failed");
+    }
+    
+    public static ArrayList<UserBean> getParticipants( String ClassID){
+        ArrayList<UserBean> a = new ArrayList<UserBean>();
+        Statement stmt = null;
+        String searchQuery = "SELECT * FROM `Studentslist` WHERE `ClassID` Like '"+ClassID+"'";
+        
+        try {
+            currentCon = ConnectionManager.getConnection();
+            stmt = currentCon.createStatement();
+            rs = stmt.executeQuery(searchQuery);
+            int cnt = 0;
+            while (rs.next()) {
+                cnt++;
+                String SID = rs.getString("SID");
+                UserBean bb = getUser(SID);
+                a.add(bb);
+            }
+            System.out.println("Size of arraList : "+cnt);
+        } catch (Exception e) {
+            System.out.println(e);
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (Exception e) {
+                }
+                rs = null;
+            }
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (Exception e) {
+                }
+                stmt = null;
+            }
+            if (currentCon != null) {
+                try {
+                    currentCon.close();
+                } catch (Exception e) {
+                }
+                currentCon = null;
+        }}
+        return a;
+    }
+    
     public static ArrayList<ClassBean> getClasses(UserBean bean) {
         ArrayList<ClassBean> a = new ArrayList<ClassBean>();
         Statement stmt = null;
@@ -293,5 +378,51 @@ public class ClassDAO {
         
         return new status(false, "Error!!");
 
+    }
+
+    private static UserBean getUser(String SID) {
+        Statement stmt = null;
+        try {
+            currentCon = ConnectionManager.getConnection();
+            stmt = currentCon.createStatement();
+            String searchQuery
+                = "select * from userlist where UserName='"
+                + SID
+                + "'";
+            rs1 = stmt.executeQuery(searchQuery);
+            if (rs1.next()) {
+                UserBean bb = new UserBean();
+                bb.setUserName(SID);
+                 String Name = rs1.getString("Name");
+                bb.setName(Name);
+                bb.setRollNo(rs1.getString("RollNo"));
+                return bb;
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        } finally {
+            if (rs1 != null) {
+                try {
+                    rs1.close();
+                } catch (Exception e) {
+                }
+                rs1 = null;
+            }
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (Exception e) {
+                }
+                stmt = null;
+            }
+            if (currentCon != null) {
+                try {
+                    currentCon.close();
+                } catch (Exception e) {
+                }
+                currentCon = null;
+            }
+        }
+        return null;
     }
 }

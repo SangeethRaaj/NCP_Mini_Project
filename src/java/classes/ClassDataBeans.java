@@ -7,6 +7,7 @@ package classes;
 
 import java.beans.*;
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  *
@@ -37,12 +38,14 @@ public class ClassDataBeans implements Serializable {
     public void setName(String Name) {
         this.Name = Name;
     }
-   
+    
+    private Map<String, String> m;
     private String ClassId;
     private String UserId;
     private String Name;
     
-    public ClassDataBeans() {   
+    
+    public ClassDataBeans() {
     }
     
 
